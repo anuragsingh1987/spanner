@@ -1,0 +1,54 @@
+tep 2: Enable the Cloud Spanner API
+Before you can use Cloud Spanner, you need to enable the Cloud Spanner API for your project:
+
+In the Google Cloud Console, navigate to the project you created or selected.
+
+In the left sidebar, click on "APIs & Services" > "Library."
+
+Search for "Cloud Spanner API."
+
+Click on "Cloud Spanner API" in the search results.
+
+Click the "Enable" button.
+
+To deploy a Google Cloud Spanner instance using Terraform, you'll need to have Terraform installed and configured with Google Cloud credentials. Here are the steps to deploy a Cloud Spanner instance using Terraform:
+
+Install Terraform: If you haven't already, install Terraform on your local machine. You can download it from the official Terraform website and follow the installation instructions for your operating system.
+
+Set Up Google Cloud Credentials: Make sure you have Google Cloud credentials set up on your local machine. You can do this by installing the Google Cloud SDK (gcloud) and running gcloud auth application-default login to authenticate.
+
+Create a Terraform Configuration File: Create a .tf file (e.g., spanner.tf) to define your Terraform configuration for the Cloud Spanner instance. Here's a basic example:
+
+hcl
+Copy code
+provider "google" {
+credentials = file("path/to/your/credentials.json")
+project     = "your-gcp-project-id"
+region      = "us-central1"  # Choose your desired region
+}
+
+resource "google_spanner_instance" "example_instance" {
+name     = "my-spanner-instance"
+config   = "regional-us-central1"
+node_count = 1  # Set the desired number of nodes
+}
+Replace "path/to/your/credentials.json" with the path to your Google Cloud service account key JSON file. Modify the project ID, region, instance name, and node count as needed.
+
+Initialize Terraform: Open a terminal and navigate to the directory containing your Terraform configuration file. Run the following command to initialize Terraform and download the necessary provider plugins:
+bash
+Copy code
+terraform init
+Plan and Apply: After initialization, you can preview the changes Terraform will make by running:
+bash
+Copy code
+terraform plan
+This command will show you a summary of what Terraform plans to create or modify.
+
+If the plan looks correct, apply the changes by running:
+
+bash
+Copy code
+terraform apply
+Terraform will prompt you to confirm the changes. Type "yes" to proceed.
+
+Verify Deployment: After the apply command completes successfully, your Cloud Spanner instance should be deployed. You can verify this by logging in to the Google Cloud Console and navigating to the "Spanner" section.
