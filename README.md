@@ -1,3 +1,7 @@
+<p style="text-align:center;"><img title="a title" alt="Alt text" src="/resources/spanner.png">         
+
+<img title="a title" alt="Alt text" src="/resources/spanner.png"></p?>
+
 # GCP Cloud Spanner
 
 Google Cloud Spanner is a fully managed, globally distributed, and strongly consistent database service provided by Google Cloud Platform (GCP). It combines the benefits of traditional relational databases with the scale and flexibility of NoSQL databases. Cloud Spanner is designed to handle mission-critical and high-throughput workloads while offering horizontal scalability, strong consistency, and global distribution.
