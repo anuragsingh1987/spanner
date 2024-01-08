@@ -1,6 +1,4 @@
-<p style="text-align:center;"><img title="a title" alt="Alt text" src="/resources/spanner.png">         
-
-<img title="a title" alt="Alt text" src="/resources/spanner.png"></p?>
+<p style="text-align:center;"><img title="a title" alt="Alt text" src="/resources/spanner.png"> </p?>
 
 # GCP Cloud Spanner
 
