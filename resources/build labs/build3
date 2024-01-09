@@ -1,0 +1,97 @@
+provider "google" {
+  project = "your-project-id"
+  region  = "us-central1"  # Replace with your desired region
+}
+
+resource "google_spanner_instance" "example_instance" {
+  name             = "example-instance"
+  config           = "regional-us-central1"  # Replace with your desired configuration
+  display_name     = "Example Instance"
+  node_count       = 1
+}
+
+resource "google_spanner_database" "example_database" {
+  name       = "example-database"
+  instance   = google_spanner_instance.example_instance.name
+
+  ddl = [
+    "CREATE TABLE Users (UserId INT64, Username STRING(MAX)) PRIMARY KEY (UserId)"
+    # Define additional tables and schema here if needed
+  ]
+}
+This Terraform configuration creates a Cloud Spanner instance named "example-instance" and a database named "example-database" within that instance. The database includes a schema definition with a single table "Users", having columns UserId and Username, with UserId as the primary key.
+
+
+
+
+To create a schema in Cloud Spanner using gcloud, you can follow these steps. In this example, we'll use a sample schema with a table named "Users."
+
+Define Your Schema:
+
+Determine the tables and columns you want in your schema. In this example, we'll create a table called "Users" with columns UserId and Username.
+Run gcloud Commands:
+
+Open your terminal or command prompt.
+
+Run the following command to create the schema using gcloud:
+
+bash
+Copy code
+gcloud spanner databases ddl update DATABASE_NAME \
+  --instance=INSTANCE_ID \
+  --ddl='CREATE TABLE Users (UserId INT64, Username STRING(MAX)) PRIMARY KEY (UserId)'
+Replace DATABASE_NAME with the name of your Cloud Spanner database.
+Replace INSTANCE_ID with the ID of your Cloud Spanner instance.
+Verify Schema Creation:
+
+After running the command, you can verify the schema creation by checking the Cloud Spanner web console or using the gcloud command:
+
+bash
+Copy code
+gcloud spanner databases ddl describe DATABASE_NAME \
+  --instance=INSTANCE_ID
+This command will display the current schema for your Cloud Spanner database.
+
+Remember to replace DATABASE_NAME and INSTANCE_ID with your actual database and instance names.
+
+This example creates a simple schema. Depending on your application requirements, you might need to define additional tables, indexes, or other schema elements. Always ensure that your schema design aligns with your application's data model and access patterns.
+
+
+
+
+
+Creating a schema in Cloud Spanner using the GCP console involves defining the schema using Data Definition Language (DDL) statements. Here's how you can do it:
+
+Open Google Cloud Console:
+
+Go to the Google Cloud Console.
+Select or Create a Project:
+
+If you haven't already selected a project, choose an existing project or create a new one by clicking on the project dropdown menu at the top of the page.
+Navigate to Spanner:
+
+In the left-hand sidebar, click on "Spanner" under the "Storage" section. This will take you to the Cloud Spanner page.
+Select Instance and Database:
+
+Choose the Spanner instance where you want to create the schema by clicking on its name.
+Inside the instance details page, click on the "Databases" tab.
+Click on the name of the database for which you want to create a schema.
+Add DDL Statements:
+
+Inside the database details page, click on the "DDL" tab.
+In the "Add DDL Statements" section, enter your Data Definition Language (DDL) statements to define the schema.
+For example, to create a table called "Users" with columns UserId and Username, you can enter the following DDL statement:
+
+sql
+Copy code
+CREATE TABLE Users (
+  UserId INT64,
+  Username STRING(MAX)
+) PRIMARY KEY (UserId);
+Apply DDL Statements:
+
+Once you've added your DDL statements, click on the "Update" button to apply the changes.
+Verify Schema Creation:
+
+You can verify the schema creation by navigating to the "DDL" tab again, where you should see the applied DDL statements.
+That's it! You've created a schema in Cloud Spanner using the GCP console. Remember to adjust the DDL statements according to your specific schema requirements.
