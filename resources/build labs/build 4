@@ -1,0 +1,85 @@
+Challenge: Building a Simple Banking Application on Cloud Spanner
+
+Scenario:
+You are tasked with designing and implementing a schema for a simple banking application that stores information about customers, accounts, and transactions using Google Cloud Spanner. Additionally, you need to create a Cloud Spanner database instance and apply the schema to support basic banking operations.
+
+Requirements:
+
+Customers:
+
+Store customer information including CustomerID, Name, Email, and Phone.
+Accounts:
+
+Each customer can have multiple accounts.
+Store account details including AccountID, CustomerID, AccountType (e.g., Savings, Checking), Balance.
+Transactions:
+
+Record transactions between accounts.
+Store transaction details like TransactionID, SenderAccountID, ReceiverAccountID, Amount, Timestamp.
+Cloud Spanner Instance:
+
+Create a Cloud Spanner instance to host the banking application database.
+Challenge:
+Design the schema for this banking application using Cloud Spanner's DDL (Data Definition Language), create a Cloud Spanner instance, and apply the schema to the instance to fulfill the mentioned requirements.
+
+Solution:
+
+Here's a solution to address the challenge:
+
+Define Schema:
+
+sql
+Copy code
+-- Create Customers table
+CREATE TABLE Customers (
+  CustomerID INT64 NOT NULL,
+  Name STRING(MAX),
+  Email STRING(MAX),
+  Phone STRING(MAX),
+) PRIMARY KEY (CustomerID);
+
+-- Create Accounts table
+CREATE TABLE Accounts (
+  AccountID INT64 NOT NULL,
+  CustomerID INT64,
+  AccountType STRING(MAX),
+  Balance FLOAT64,
+) PRIMARY KEY (AccountID),
+  INTERLEAVE IN PARENT Customers ON DELETE CASCADE;
+
+-- Create Transactions table
+CREATE TABLE Transactions (
+  TransactionID INT64 NOT NULL,
+  SenderAccountID INT64,
+  ReceiverAccountID INT64,
+  Amount FLOAT64,
+  Timestamp TIMESTAMP OPTIONS (allow_commit_timestamp=true),
+) PRIMARY KEY (TransactionID),
+  INTERLEAVE IN PARENT Accounts ON DELETE CASCADE;
+Create Cloud Spanner Instance:
+
+bash
+Copy code
+gcloud spanner instances create banking-instance \
+  --config=regional-us-central1 \
+  --nodes=1
+Apply Schema to the Instance:
+
+bash
+Copy code
+gcloud spanner databases ddl update banking-database \
+  --instance=banking-instance \
+  --ddl='CREATE TABLE Customers (CustomerID INT64 NOT NULL, Name STRING(MAX), Email STRING(MAX), Phone STRING(MAX)) PRIMARY KEY (CustomerID);
+         CREATE TABLE Accounts (AccountID INT64 NOT NULL, CustomerID INT64, AccountType STRING(MAX), Balance FLOAT64) PRIMARY KEY (AccountID), INTERLEAVE IN PARENT Customers ON DELETE CASCADE;
+         CREATE TABLE Transactions (TransactionID INT64 NOT NULL, SenderAccountID INT64, ReceiverAccountID INT64, Amount FLOAT64, Timestamp TIMESTAMP OPTIONS (allow_commit_timestamp=true)) PRIMARY KEY (TransactionID), INTERLEAVE IN PARENT Accounts ON DELETE CASCADE;'
+Verify Schema and Instance Creation:
+
+bash
+Copy code
+# Check Spanner Instance
+gcloud spanner instances describe banking-instance
+
+# Check Spanner Database
+gcloud spanner databases ddl describe banking-database \
+  --instance=banking-instance
+This solution creates a schema for a simple banking application, creates a Cloud Spanner instance named "banking-instance," and applies the schema to the database within the instance. Adjust parameters and names as needed for your specific use case.
