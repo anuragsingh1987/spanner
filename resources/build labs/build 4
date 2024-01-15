@@ -83,3 +83,10 @@ gcloud spanner instances describe banking-instance
 gcloud spanner databases ddl describe banking-database \
   --instance=banking-instance
 This solution creates a schema for a simple banking application, creates a Cloud Spanner instance named "banking-instance," and applies the schema to the database within the instance. Adjust parameters and names as needed for your specific use case.
+
+
+gcloud spanner databases ddl update banking-database \
+  --instance=banking-instance \
+  --ddl="CREATE TABLE Customers (CustomerID INT64 NOT NULL, Name STRING(MAX), Email STRING(MAX), Phone STRING(MAX)) PRIMARY KEY (CustomerID);
+         CREATE TABLE Accounts (AccountID INT64 NOT NULL, CustomerID INT64, AccountType STRING(MAX), Balance FLOAT64) PRIMARY KEY (AccountID), INTERLEAVE IN PARENT Customers ON DELETE CASCADE;
+         CREATE TABLE Transactions (TransactionID INT64 NOT NULL, SenderAccountID INT64, ReceiverAccountID INT64, Amount FLOAT64, Timestamp TIMESTAMP OPTIONS (allow_commit_timestamp=true)) PRIMARY KEY (TransactionID), INTERLEAVE IN PARENT Accounts ON DELETE CASCADE;"
