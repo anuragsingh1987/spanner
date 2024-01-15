@@ -90,3 +90,14 @@ gcloud spanner databases ddl update banking-database \
   --ddl="CREATE TABLE Customers (CustomerID INT64 NOT NULL, Name STRING(MAX), Email STRING(MAX), Phone STRING(MAX)) PRIMARY KEY (CustomerID);
          CREATE TABLE Accounts (AccountID INT64 NOT NULL, CustomerID INT64, AccountType STRING(MAX), Balance FLOAT64) PRIMARY KEY (AccountID), INTERLEAVE IN PARENT Customers ON DELETE CASCADE;
          CREATE TABLE Transactions (TransactionID INT64 NOT NULL, SenderAccountID INT64, ReceiverAccountID INT64, Amount FLOAT64, Timestamp TIMESTAMP OPTIONS (allow_commit_timestamp=true)) PRIMARY KEY (TransactionID), INTERLEAVE IN PARENT Accounts ON DELETE CASCADE;"
+
+
+         gcloud spanner databases ddl update banking-database --instance=banking-instance \
+  --ddl='CREATE TABLE Customers (CustomerID INT64 NOT NULL, Name STRING(MAX), Email STRING(MAX), Phone STRING(MAX)) PRIMARY KEY (CustomerID);'
+
+gcloud spanner databases ddl update banking-database --instance=banking-instance \
+  --ddl='CREATE TABLE Accounts (AccountID INT64 NOT NULL, CustomerID INT64, AccountType STRING(MAX), Balance FLOAT64) PRIMARY KEY (AccountID), INTERLEAVE IN PARENT Customers ON DELETE CASCADE (CustomerID);'
+
+gcloud spanner databases ddl update banking-database --instance=banking-instance \
+  --ddl='CREATE TABLE Transactions (TransactionID INT64 NOT NULL, SenderAccountID INT64, ReceiverAccountID INT64, Amount FLOAT64, Timestamp TIMESTAMP OPTIONS (allow_commit_timestamp=true)) PRIMARY KEY (TransactionID), INTERLEAVE IN PARENT Accounts ON DELETE CASCADE (CustomerID);'
+
